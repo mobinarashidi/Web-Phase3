@@ -1,6 +1,7 @@
 package com.example.WebPhase3.controller;
 
 import com.example.WebPhase3.model.Player;
+import com.example.WebPhase3.model.Question; // اضافه کردن این خط
 import com.example.WebPhase3.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +24,12 @@ public class PlayerController {
         return playerService.findByUsername(username);
     }
 
-    @PutMapping("/players/followings/{name}")
-    public Player followPlayer(@PathVariable String name, @RequestBody String following) {
-        Player player = playerService.findByUsername(name);
-        if (player != null && !player.getFollowings().contains(following)) {
-            player.getFollowings().add(following);
-            Player followingPlayer = playerService.findByUsername(following);
-            if (followingPlayer != null && !followingPlayer.getFollowers().contains(name)) {
-                followingPlayer.getFollowers().add(name);
-                playerService.save(followingPlayer);
-            }
-            return playerService.save(player);
+    @GetMapping("/answeredQuestions/{username}")
+    public List<Question> getAnsweredQuestions(@PathVariable String username) {
+        Player player = playerService.findByUsername(username);
+        if (player == null) {
+            throw new RuntimeException("Player not found");
         }
-        return null;
+        return player.getAnsweredQuestions();
     }
 }
