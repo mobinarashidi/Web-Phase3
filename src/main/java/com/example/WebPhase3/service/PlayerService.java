@@ -22,4 +22,33 @@ public class PlayerService {
     public Player save(Player player) {
         return repository.save(player);
     }
+
+    public String addFollower(String username, String newFollower) {
+            Player player = findByUsername(username);
+            Player followingPlayer = findByUsername(newFollower);
+                 if (player == null || followingPlayer == null) {
+         return "Player not found";
+               }
+                 if (player.getFollowers().contains(newFollower)) {
+         return "Follower already exists";
+               }
+         player.getFollowers().add(newFollower);
+         followingPlayer.getFollowings().add(username);
+         repository.save(player);
+         repository.save(followingPlayer);
+         return newFollower + " added to " + username + "'s followers";
+           }
+
+
+    public String updateScore(String username, Player updatedPlayer) {
+          Player player = repository.findByUsername(username).orElse(null);
+             if (player == null) {
+                    return "Player not found";
+                                 }
+               player.setScore(updatedPlayer.getScore());
+               player.getAnsweredQuestions().addAll(updatedPlayer.getAnsweredQuestions());
+               repository.save(player);
+               return player.getUsername() + " profile updated";
+
+               }
 }

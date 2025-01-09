@@ -32,4 +32,14 @@ public class PlayerController {
         }
         return player.getAnsweredQuestions();
     }
+
+    @PutMapping("/following/{username}")
+    public String updateFollowing(@PathVariable String username, @RequestBody String follower) {
+    return playerService.addFollower(username, follower);
+    }
+
+    @PutMapping("/updateScore/{username}")
+    public String updateScore(@PathVariable String username, @RequestBody Player updatedPlayer) {
+    return playerService.updateScore(username, updatedPlayer);
+     }
 }
