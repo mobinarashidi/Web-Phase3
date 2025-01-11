@@ -30,10 +30,8 @@ public class CategoryController {
             categoryService.addCategory(category);
             return ResponseEntity.status(HttpStatus.CREATED).body("Category added successfully.");
         } catch (Exception e) {
-            // Log the error and return a detailed message
-            e.printStackTrace(); // This logs the error in the console
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An unexpected error occurred: " + e.getMessage());
+                    .body("An unexpected error occurred. Please try again!");
         }
     }
 
