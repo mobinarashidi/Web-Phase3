@@ -18,20 +18,12 @@ public class TarrahService {
         return tarrahRepository.findAll();
     }
 
-    public Optional<Tarrah> findById(String username) {
-        return tarrahRepository.findById(username);
-    }
-
     public Optional<Tarrah> findByUsername(String username) {
         return tarrahRepository.findByUsername(username);
     }
 
-    public Tarrah save(Tarrah tarrah) {
-        return tarrahRepository.save(tarrah);
-    }
-
-    public void deleteById(String username) {
-        tarrahRepository.deleteById(username);
+    public void save(Tarrah tarrah) {
+        tarrahRepository.save(tarrah);
     }
 
     public boolean existsByUsername(String username) {
