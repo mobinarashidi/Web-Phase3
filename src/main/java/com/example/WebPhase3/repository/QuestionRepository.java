@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface QuestionRepository extends MongoRepository<Question, String> {
     List<Question> findByCategory(String category);
+    List<Question> findByTarrahName(String tarrahName);
 }

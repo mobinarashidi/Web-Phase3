@@ -32,6 +32,15 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestionsByCategory(category));
     }
 
+    // Get questions by tarrah name
+    @GetMapping("/tarrah/{tarrahName}")
+    public ResponseEntity<?> getQuestionsByTarrah(@PathVariable String tarrahName) {
+        if (questionService.getQuestionsByTarrahName(tarrahName).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No question found from " + tarrahName);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestionsByTarrahName(tarrahName));
+    }
+
     // Add a new question
     @PostMapping("/add")
     public ResponseEntity<String> addQuestion(@RequestBody Question question) {

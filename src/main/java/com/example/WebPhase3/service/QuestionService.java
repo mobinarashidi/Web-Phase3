@@ -20,6 +20,9 @@ public class QuestionService {
     public List<Question> getQuestionsByCategory(String category) {
         return repository.findByCategory(category);
     }
+    public List<Question> getQuestionsByTarrahName(String tarrahName) {
+        return repository.findByTarrahName(tarrahName);
+    }
 
     public Question addQuestion(Question question) {
         return repository.save(question);
