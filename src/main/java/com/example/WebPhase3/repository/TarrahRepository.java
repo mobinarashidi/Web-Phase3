@@ -8,4 +8,6 @@ public interface TarrahRepository extends MongoRepository<Tarrah, String> {
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     Optional<Tarrah> findByUsername(String username);
+
+    Optional<Object> findByEmail(String email);
 }

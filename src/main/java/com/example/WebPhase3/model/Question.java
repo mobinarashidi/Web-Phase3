@@ -80,5 +80,7 @@ public class Question {
 
     public void setTarrahName(String tarrahName) {
         this.tarrahName = tarrahName;
+
+
     }
 }
