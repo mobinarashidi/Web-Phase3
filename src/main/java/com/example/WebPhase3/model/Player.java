@@ -1,4 +1,3 @@
-
 package com.example.WebPhase3.model;
 
 import lombok.Data;
@@ -112,13 +111,4 @@ public class Player {
         this.answeredQuestions = answeredQuestions;
     }
 
-    public Player orElse(Object object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElse'");
-    }
-
-    public boolean isPresent() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isPresent'");
-    }
 }

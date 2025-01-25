@@ -17,7 +17,7 @@ public class AuthController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         Player player = userRepository.findByUsername(loginRequest.getUsername()).orElse(null);
         if (player == null) {
-            return ResponseEntity.status(404).body("نام کاربری یافت نشد.لطفا ثبت نام کنید.");
+            return ResponseEntity.status(404).body("نام کاربری یافت نشد. لطفا ثبت نام کنید.");
         }
         if (!player.getPassword().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(401).body("گذرواژه نادرست است!");
