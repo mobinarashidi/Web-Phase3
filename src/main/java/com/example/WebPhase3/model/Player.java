@@ -110,5 +110,6 @@ public class Player {
     public void setAnsweredQuestions(List<Question> answeredQuestions) {
         this.answeredQuestions = answeredQuestions;
     }
+
 }
 
