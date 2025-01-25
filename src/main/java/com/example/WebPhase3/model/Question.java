@@ -34,6 +34,7 @@ public class Question {
         this.category = category;
     }
 
+
     public String getText() {
         return text;
     }
@@ -49,6 +50,7 @@ public class Question {
 
     public void setAnswered(boolean answered) {
         this.answered = answered;
+
 
     public List<String> getChoices() {
         return choices;
@@ -80,6 +82,7 @@ public class Question {
 
     public void setTarrahName(String tarrahName) {
         this.tarrahName = tarrahName;
+
 
     }
 }
