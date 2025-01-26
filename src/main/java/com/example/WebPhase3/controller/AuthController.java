@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -73,7 +74,7 @@ public class AuthController {
             player.setBio("سلام! منم یکی از بازیکن‌های سوال پیچ هستم، خوشحال میشم باهم رقابت کنیم.");
             player.setFollowers(new LinkedList<String>());
             player.setFollowings(new LinkedList<String>());
-            player.setAnsweredQuestions(new LinkedList<Question>());
+            player.setAnsweredQuestions(new LinkedList<Map<String, Object>>());
 
 
             playerRepository.save(player);

@@ -35,6 +35,19 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK).body(questionService.getQuestionsByCategory(category));
     }
 
+    // Get a random question
+    @GetMapping("/random")
+    public ResponseEntity<?> getRandomQuestion() {
+        if (questionService.getAllQuestions().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("no questions found!"); // No questions available
+        }
+        List<Question> allQuestions = questionService.getAllQuestions();
+        int randomIndex = (int) (Math.random() * allQuestions.size());
+        Question randomQuestion = allQuestions.get(randomIndex);
+        return ResponseEntity.ok(randomQuestion);
+    }
+
     // Get questions by tarrah name
     @GetMapping("/tarrah/{tarrahName}")
     public ResponseEntity<?> getQuestionsByTarrah(@PathVariable String tarrahName) {

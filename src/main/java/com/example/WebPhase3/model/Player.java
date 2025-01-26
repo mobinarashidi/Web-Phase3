@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Document(collection = "players")
@@ -19,7 +20,7 @@ public class Player {
     private int score;
     private List<String> followers;
     private List<String> followings;
-    private List<Question> answeredQuestions;
+    private List<Map<String, Object>> answeredQuestions;
 
     // گترها و سترها
 
@@ -103,11 +104,11 @@ public class Player {
         this.followings = followings;
     }
 
-    public List<Question> getAnsweredQuestions() {
+    public List<Map<String, Object>> getAnsweredQuestions() {
         return answeredQuestions;
     }
 
-    public void setAnsweredQuestions(List<Question> answeredQuestions) {
+    public void setAnsweredQuestions(List<Map<String, Object>> answeredQuestions) {
         this.answeredQuestions = answeredQuestions;
     }
 

@@ -26,7 +26,7 @@ public class CategoryController {
             // Check if category already exists
             if (categoryService.categoryExists(category.getCategoryName())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Category '" + category.getCategoryName() + "' already exists!");
+                        .body( "!" + "دسته بندی " + category.getCategoryName() + " وجود دارد");
             }
 
             // Add the category
