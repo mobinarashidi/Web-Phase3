@@ -40,10 +40,12 @@ public class PlayerController {
         return player.getAnsweredQuestions();
     }
 
-    @PutMapping("/following/{username}")
-    public String updateFollowing(@PathVariable String username, @RequestBody String follower) {
+@PutMapping("/following/{username}")
+public String updateFollowing(@PathVariable String username, @RequestBody Map<String, String> requestBody) {
+    String follower = requestBody.get("follower");
     return playerService.addFollower(username, follower);
-    }
+}
+
 
     @PutMapping("/updateScore/{username}")
     public ResponseEntity<?> updateScore(

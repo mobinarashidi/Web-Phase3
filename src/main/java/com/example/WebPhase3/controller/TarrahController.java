@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.WebPhase3.model.Player;
+import com.example.WebPhase3.service.PlayerService;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,8 @@ public class TarrahController {
 
     @Autowired
     private TarrahService tarrahService;
+   @Autowired
+       private PlayerService playerService;
 
     // CRUD operations for Tarrah
 
@@ -56,35 +59,7 @@ public class TarrahController {
         return ResponseEntity.status(HttpStatus.OK).body(tarrah);
     }
 
-    @PutMapping("/followers/{username}")
-    public ResponseEntity<?> addFollower(@PathVariable String username, @RequestBody Map<String, String> requestBody) {
-        try {
-            String newFollower = requestBody.get("follower");
-            if (newFollower == null || newFollower.isEmpty()) {
-                return ResponseEntity.badRequest().body("No follower provided in the request body.");
-            }
 
-            // Find the Tarrah by username
-            Optional<Tarrah> optionalTarrah = tarrahService.findByUsername(username);
-            if (optionalTarrah.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarrah not found.");
-            }
-
-            // Check if the follower already exists
-            if (optionalTarrah.get().getFollowers().contains(newFollower)) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Follower already exists.");
-            }
-
-            // Add the follower
-            Tarrah tarrah = optionalTarrah.get();
-            tarrah.getFollowers().add(newFollower);
-            tarrahService.save(tarrah);
-
-            return ResponseEntity.status(HttpStatus.OK).body(newFollower + " added to " + tarrah.getUsername() + "'s followers");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
-        }
-    }
 
 
     // Put : increment the Tarrah's question count
@@ -100,4 +75,50 @@ public class TarrahController {
         tarrahService.save(tarrah);
         return ResponseEntity.ok(tarrah.getUsername() + "'s question count updated");
     }
+
+
+   @PutMapping("/followers/{username}")
+   public ResponseEntity<?> addFollower(@PathVariable String username, @RequestBody Map<String, String> requestBody) {
+       try {
+           String newFollower = requestBody.get("follower");
+           if (newFollower == null || newFollower.isEmpty()) {
+               return ResponseEntity.badRequest().body("No follower provided in the request body.");
+           }
+
+           // Find the Tarrah by username
+           Optional<Tarrah> optionalTarrah = tarrahService.findByUsername(username);
+           if (optionalTarrah.isEmpty()) {
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarrah not found.");
+           }
+
+           // Find the player by username
+           Player player = playerService.findByUsername(newFollower);
+           if (player == null) {
+               return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Player not found.");
+           }
+
+           Tarrah tarrah = optionalTarrah.get();
+
+           // Check if the player is already a follower
+           if (tarrah.getFollowers().contains(newFollower)) {
+               return ResponseEntity.status(HttpStatus.CONFLICT).body("Follower already exists.");
+           }
+
+           // Add player to tarrah's followers
+           tarrah.getFollowers().add(newFollower);
+
+           // Add tarrah to player's followings
+           player.getFollowings().add(tarrah.getUsername());
+
+           // Save the updated entities
+           tarrahService.save(tarrah);
+           playerService.save(player);
+
+           return ResponseEntity.status(HttpStatus.OK).body(newFollower + " added to " + tarrah.getUsername() + "'s followers");
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
+       }
+   }
+
+
 }
