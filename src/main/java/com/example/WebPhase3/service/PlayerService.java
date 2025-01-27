@@ -52,12 +52,8 @@ public class PlayerService {
         player.setScore(newScore);
 
         // Update answered questions
-        for (Map<String, Object> question : player.getAnsweredQuestions()) {
-            if (question.get("text").equals(questionText)) {
-                question.put("answered", isAnswerCorrect);
-                break;
-            }
-        }
+        player.updateAnsweredQuestions(questionText, isAnswerCorrect);
+        player.setChallenges(player.getChallenges() + 1);
 
         // Save updated player data
         repository.save(player);
