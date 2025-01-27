@@ -48,23 +48,23 @@ public String updateFollowing(@PathVariable String username, @RequestBody Map<St
 
 
     @PutMapping("/updateScore/{username}")
-    public ResponseEntity<?> updateScore(
-            @PathVariable String username,
-            @RequestBody Map<String, Object> requestBody) {
-        try {
-            // Extract data from requestBody
-            int newScore = (int) requestBody.get("score");
-            String text = (String) requestBody.get("text");
-            boolean answer = (boolean) requestBody.get("answer");
+        public ResponseEntity<?> updateScore(
+                @PathVariable String username,
+                @RequestBody Map<String, Object> requestBody) {
+            try {
+                // Extract data from requestBody
+                int newScore = (int) requestBody.get("score");
+                String text = (String) requestBody.get("text");
+                boolean answer = (boolean) requestBody.get("answer");
 
-            // Delegate the update logic to the service layer
-            String result = playerService.updateScore(username, newScore, text, answer);
+                // Delegate the update logic to the service layer
+                String result = playerService.updateScore(username, newScore, text, answer);
 
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            // Handle any exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while updating the score.");
+                return ResponseEntity.ok(result);
+            } catch (Exception e) {
+                // Handle any exceptions
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("An error occurred while updating the score.");
+            }
         }
-    }
 }

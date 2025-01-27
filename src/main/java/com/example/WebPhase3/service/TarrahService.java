@@ -33,4 +33,9 @@ public class TarrahService {
     public boolean existsByEmail(String email) {
         return tarrahRepository.existsByEmail(email);
     }
+
+    public List<Tarrah> findTarrahsByFollowersUsername(String username) {
+        return tarrahRepository.findByFollowersContaining(username);
+    }
+
 }

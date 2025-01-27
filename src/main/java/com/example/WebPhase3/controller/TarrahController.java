@@ -1,5 +1,5 @@
 package com.example.WebPhase3.controller;
-
+import java.util.HashMap;
 import com.example.WebPhase3.model.Tarrah;
 import com.example.WebPhase3.service.TarrahService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
+import com.example.WebPhase3.service.QuestionService;
+import com.example.WebPhase3.model.Question;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -23,7 +24,8 @@ public class TarrahController {
     private TarrahService tarrahService;
    @Autowired
        private PlayerService playerService;
-
+   @Autowired
+          private QuestionService questionService;
     // CRUD operations for Tarrah
 
     // Post : add a new Tarrah
@@ -119,6 +121,46 @@ public class TarrahController {
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred.");
        }
    }
+
+@GetMapping("/followingsQuestions/{username}")
+public ResponseEntity<?> getFollowingsQuestions(@PathVariable String username) {
+    try {
+        // بررسی وجود بازیکن
+        Player player = playerService.findByUsername(username);
+        if (player == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Player not found.");
+        }
+
+        // دریافت طراحانی که بازیکن دنبال کرده است
+        List<Tarrah> tarrahs = tarrahService.findTarrahsByFollowersUsername(username);
+        if (tarrahs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(username + " is not following any tarrahs.");
+        }
+
+        // استخراج داده‌ها
+        List<Map<String, Object>> result = tarrahs.stream().map(tarrah -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("gender", tarrah.getGender());
+            map.put("username", tarrah.getUsername());
+
+            // دریافت سوالات مربوط به طراح
+            List<Question> questions = questionService.getQuestionsByTarrahName(tarrah.getUsername());
+            List<String> questionTexts = questions.stream()
+                                                  .map(Question::getText)
+                                                  .toList();
+            map.put("questions", questionTexts); // به جای تعداد، متن سوالات اضافه می‌شود
+
+            return map;
+        }).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+    }
+}
+
+
+
 
 
 }
