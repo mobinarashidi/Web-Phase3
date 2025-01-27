@@ -40,6 +40,7 @@ public class PlayerController {
         return player.getAnsweredQuestions();
     }
 
+
 @PutMapping("/following/{username}")
 public String updateFollowing(@PathVariable String username, @RequestBody Map<String, String> requestBody) {
     String follower = requestBody.get("follower");
