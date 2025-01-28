@@ -3,6 +3,8 @@ package com.example.WebPhase3.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +12,7 @@ import java.util.Map;
 @Document(collection = "players")
 public class Player {
     @Id
-    private String id; // تغییر این فیلد به عنوان Id
+    private String id;
     private String gender;
     private String username;
     private String password;
@@ -22,7 +24,7 @@ public class Player {
     private List<String> followings;
     private List<Map<String, Object>> answeredQuestions;
 
-    // گترها و سترها
+    // getters and setters
 
     public String getId() {
         return id;
@@ -110,6 +112,15 @@ public class Player {
 
     public void setAnsweredQuestions(List<Map<String, Object>> answeredQuestions) {
         this.answeredQuestions = answeredQuestions;
+    }
+
+    public void updateAnsweredQuestions(String text, Boolean answeredCorrect) {
+        Map<String, Object> newQuestion = new HashMap<>();
+
+        newQuestion.put("text", text);
+        newQuestion.put("answered", answeredCorrect);
+
+        answeredQuestions.add(newQuestion);
     }
 
 }
