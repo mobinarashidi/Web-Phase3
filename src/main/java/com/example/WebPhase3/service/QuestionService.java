@@ -28,4 +28,7 @@ public class QuestionService {
         return repository.save(question);
     }
 
+      public Optional<Question> findByText(String text) {
+            return repository.findByText(text);
+        }
 }
