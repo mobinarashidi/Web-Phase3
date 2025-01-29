@@ -1,0 +1,60 @@
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+  category-service:
+    build:
+      context: .
+      dockerfile: category-service/Dockerfile
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+  player-service:
+    build:
+      context: .
+      dockerfile: player-service/Dockerfile
+    ports:
+      - "5003:5003"
+    depends_on:
+      - mongo
+  question-service:
+    build:
+      context: .
+      dockerfile: question-service/Dockerfile
+    ports:
+      - "5004:5004"
+    depends_on:
+      - mongo
+  tarrah-service:
+    build:
+      context: .
+      dockerfile: tarrah-service/Dockerfile
+    ports:
+      - "5005:5005"
+    depends_on:
+      - mongo
+  frontend:
+    build:
+      context: ./WebProject_Phase2_Front_Group10
+    ports:
+      - "80:80"
+    depends_on:
+      - auth-service
+      - category-service
+      - player-service
+      - question-service
+      - tarrah-service
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
