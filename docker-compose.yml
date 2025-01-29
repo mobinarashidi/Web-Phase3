@@ -24,7 +24,11 @@ services:
     ports:
       - "5001:5001"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
     networks:
       - backend
 
@@ -35,7 +39,11 @@ services:
     ports:
       - "5002:5002"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
     networks:
       - backend
 
@@ -46,7 +54,11 @@ services:
     ports:
       - "5003:5003"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
     networks:
       - backend
 
@@ -57,7 +69,11 @@ services:
     ports:
       - "5004:5004"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
     networks:
       - backend
 
@@ -68,7 +84,11 @@ services:
     ports:
       - "5005:5005"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
     networks:
       - backend
 
@@ -92,6 +112,12 @@ services:
       - "27017:27017"
     networks:
       - backend
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017 --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
 
 networks:
   backend:
