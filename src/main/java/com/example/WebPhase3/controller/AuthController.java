@@ -1,7 +1,7 @@
 package com.example.WebPhase3.controller;
 
+import com.example.WebPhase3.Security.JwtUtil;
 import com.example.WebPhase3.model.Player;
-import com.example.WebPhase3.model.Question;
 import com.example.WebPhase3.model.Tarrah;
 import com.example.WebPhase3.repository.UserRepository;
 import com.example.WebPhase3.repository.TarrahRepository;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -26,8 +25,11 @@ public class AuthController {
     @Autowired
     private TarrahRepository tarrahRepository;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         String role = loginRequest.getRole();
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
@@ -40,7 +42,8 @@ public class AuthController {
             if (!player.getPassword().equals(password)) {
                 return ResponseEntity.status(401).body("گذرواژه نادرست است!");
             }
-            return ResponseEntity.ok("ورود موفقیت آمیز بود!");
+            String token = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(new JwtResponse(token));
         } else if (role.equals("tarrah")) {
             Tarrah tarrah = tarrahRepository.findByUsername(username).orElse(null);
             if (tarrah == null) {
@@ -49,14 +52,15 @@ public class AuthController {
             if (!tarrah.getPassword().equals(password)) {
                 return ResponseEntity.status(401).body("گذرواژه نادرست است!");
             }
-            return ResponseEntity.ok("ورود موفقیت آمیز بود!");
+            String token = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(new JwtResponse(token));
         } else {
             return ResponseEntity.status(400).body("نقش نامعتبر است.");
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         String role = registerRequest.getRole();
         String username = registerRequest.getUsername();
         String email = registerRequest.getEmail();
@@ -93,7 +97,7 @@ public class AuthController {
         } else {
             return ResponseEntity.status(400).body("نقش نامعتبر است.");
         }
-
-        return ResponseEntity.status(201).body("ثبت نام موفقیت آمیز بود!");
+        String token = jwtUtil.generateToken(username);
+        return ResponseEntity.status(201).body(new JwtResponse(token));
     }
 }

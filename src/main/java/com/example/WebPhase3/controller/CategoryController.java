@@ -1,5 +1,6 @@
 package com.example.WebPhase3.controller;
 
+import com.example.WebPhase3.Security.JwtUtil;
 import com.example.WebPhase3.model.Category;
 import com.example.WebPhase3.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
@@ -19,14 +21,21 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // Create - Add a new category
     @PostMapping("/add")
-    public ResponseEntity<?> addCategory(@RequestBody Category category) {
+    public ResponseEntity<?> addCategory(@RequestBody Category category, @RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
+
         try {
             // Check if category already exists
             if (categoryService.categoryExists(category.getCategoryName())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body( "!" + "دسته بندی " + category.getCategoryName() + " وجود دارد");
+                        .body("!" + "دسته بندی " + category.getCategoryName() + " وجود دارد");
             }
 
             // Add the category
@@ -41,7 +50,11 @@ public class CategoryController {
 
     // Read - Get all categories
     @GetMapping
-    public ResponseEntity<?> getAllCategories() {
+    public ResponseEntity<?> getAllCategories(@RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
+
         try {
             List<Category> categories = categoryService.getAllCategories();
             return ResponseEntity.status(HttpStatus.OK).body(categories);

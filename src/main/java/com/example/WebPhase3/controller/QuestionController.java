@@ -1,5 +1,6 @@
 package com.example.WebPhase3.controller;
 
+import com.example.WebPhase3.Security.JwtUtil;
 import com.example.WebPhase3.model.Question;
 import com.example.WebPhase3.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 
@@ -19,16 +21,24 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // Get all questions
     @GetMapping
-    public List<Question> getAllQuestions() {
+    public List<Question> getAllQuestions(@RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            throw new RuntimeException("Invalid JWT Token");
+        }
         return questionService.getAllQuestions();
     }
 
     // Get questions by category
     @GetMapping("/{category}")
-    public ResponseEntity<?> getQuestionsByCategory(@PathVariable String category) {
+    public ResponseEntity<?> getQuestionsByCategory(@PathVariable String category, @RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
         if (questionService.getQuestionsByCategory(category).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No question found for this category!");
         }
@@ -37,7 +47,10 @@ public class QuestionController {
 
     // Get a random question
     @GetMapping("/random")
-    public ResponseEntity<?> getRandomQuestion() {
+    public ResponseEntity<?> getRandomQuestion(@RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
         if (questionService.getAllQuestions().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("no questions found!"); // No questions available
@@ -50,7 +63,10 @@ public class QuestionController {
 
     // Get questions by tarrah name
     @GetMapping("/tarrah/{tarrahName}")
-    public ResponseEntity<?> getQuestionsByTarrah(@PathVariable String tarrahName) {
+    public ResponseEntity<?> getQuestionsByTarrah(@PathVariable String tarrahName, @RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
         if (questionService.getQuestionsByTarrahName(tarrahName).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No question found from " + tarrahName);
         }
@@ -59,7 +75,10 @@ public class QuestionController {
 
     // Add a new question
     @PostMapping("/add")
-    public ResponseEntity<String> addQuestion(@RequestBody Question question) {
+    public ResponseEntity<String> addQuestion(@RequestBody Question question, @RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validateToken(token.substring(7))) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT Token");
+        }
         try {
             questionService.addQuestion(question);
             return ResponseEntity.status(HttpStatus.OK).body("Question added successfully");
