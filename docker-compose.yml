@@ -13,6 +13,7 @@ services:
       - player-service
       - question-service
       - tarrah-service
+      - security-service
       - frontend
     networks:
       - backend
@@ -92,6 +93,21 @@ services:
     networks:
       - backend
 
+  security-service:
+    build:
+      context: .
+      dockerfile: security-service/Dockerfile
+    ports:
+      - "5006:5006"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mydatabase
+    networks:
+      - backend
+
   frontend:
     build:
       context: ./WebProject_Phase2_Front_Group10
@@ -103,6 +119,7 @@ services:
       - player-service
       - question-service
       - tarrah-service
+      - security-service
     networks:
       - backend
 
