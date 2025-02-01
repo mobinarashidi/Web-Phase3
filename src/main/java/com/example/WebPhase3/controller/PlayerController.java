@@ -1,6 +1,6 @@
 package com.example.WebPhase3.controller;
 
-import com.example.WebPhase3.Security.JwtUtil;
+import com.example.WebPhase3.Security.JwtTokenProvider;
 import com.example.WebPhase3.model.Tarrah;
 import com.example.WebPhase3.service.TarrahService;
 
@@ -44,7 +44,7 @@ public class PlayerController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtUtil;
 
     @GetMapping("/players")
     public List<Player> getAllPlayers(@RequestHeader("Authorization") String token) {

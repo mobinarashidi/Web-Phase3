@@ -2,7 +2,7 @@ package com.example.WebPhase3.controller;
 
 import java.util.HashMap;
 
-import com.example.WebPhase3.Security.JwtUtil;
+import com.example.WebPhase3.Security.JwtTokenProvider;
 import com.example.WebPhase3.model.Tarrah;
 import com.example.WebPhase3.service.TarrahService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class TarrahController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtUtil;
     // CRUD operations for Tarrah
 
     // Post : add a new Tarrah

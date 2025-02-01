@@ -1,6 +1,6 @@
 package com.example.WebPhase3.controller;
 
-import com.example.WebPhase3.Security.JwtUtil;
+import com.example.WebPhase3.Security.JwtTokenProvider;
 import com.example.WebPhase3.model.Category;
 import com.example.WebPhase3.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtUtil;
 
     // Create - Add a new category
     @PostMapping("/add")

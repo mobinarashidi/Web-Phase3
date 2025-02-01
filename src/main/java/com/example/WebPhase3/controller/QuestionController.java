@@ -1,6 +1,6 @@
 package com.example.WebPhase3.controller;
 
-import com.example.WebPhase3.Security.JwtUtil;
+import com.example.WebPhase3.Security.JwtTokenProvider;
 import com.example.WebPhase3.model.Question;
 import com.example.WebPhase3.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtUtil;
 
     // Get all questions
     @GetMapping
